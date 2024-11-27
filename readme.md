@@ -21,7 +21,7 @@ A high-performance tool to analyze KOKO token holders on Solana and identify "di
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/koko-diamond-analyzer
+git clone 
 cd koko-diamond-analyzer
 ```
 
