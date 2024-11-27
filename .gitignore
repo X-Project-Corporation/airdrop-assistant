@@ -1,0 +1,10 @@
+node_modules/
+.env
+.DS_Store
+*.log
+*.csv
+cache
+.koko-analyzer-cache/
+.idea
+package-lock.json
+wallet.js
