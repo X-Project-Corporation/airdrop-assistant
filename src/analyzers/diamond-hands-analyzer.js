@@ -213,6 +213,9 @@ export class DiamondHandsAnalyzer {
         if (holder.amount < CONFIG.MIN_TOKENS) {
             return `Insufficient balance (${holder.amount.toLocaleString()} < ${CONFIG.MIN_TOKENS.toLocaleString()})`;
         }
+        if (holder.amount > CONFIG.MAX_TOKENS) {
+            return `Balance exceeds maximum limit (${holder.amount.toLocaleString()} > ${CONFIG.MAX_TOKENS.toLocaleString()})`;
+        }
         if (analysis.hasSold) {
             return 'Has sold KOKO in the past';
         }

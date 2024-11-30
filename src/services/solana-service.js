@@ -1,8 +1,8 @@
-import { Connection, PublicKey } from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import {Connection, PublicKey} from '@solana/web3.js';
+import {TOKEN_PROGRAM_ID} from '@solana/spl-token';
 import pLimit from 'p-limit';
-import { CONFIG } from '../config.js';
-import { Logger } from '../utils/logger.js';
+import {CONFIG} from '../config.js';
+import {Logger} from '../utils/logger.js';
 
 export class SolanaService {
     constructor(cacheManager) {
@@ -41,8 +41,8 @@ export class SolanaService {
                 TOKEN_PROGRAM_ID,
                 {
                     filters: [
-                        { dataSize: 165 },
-                        { memcmp: { offset: 0, bytes: this.mintPubkey.toBase58() } }
+                        {dataSize: 165},
+                        {memcmp: {offset: 0, bytes: this.mintPubkey.toBase58()}}
                     ]
                 }
             );
@@ -107,7 +107,7 @@ export class SolanaService {
 
     async fetchAllSignatures(pubKey) {
         let allSignatures = [];
-        let options = { limit: 1000 };
+        let options = {limit: 1000};
 
         while (true) {
             const signatures = await this.limiter(() =>
@@ -221,7 +221,7 @@ export class SolanaService {
         let hasSold = false;
 
         for (const tx of transactions) {
-            const { acquired, sold, amount, date } = this.analyzeTransaction(tx, wallet);
+            const {acquired, sold, amount, date} = this.analyzeTransaction(tx, wallet);
 
             maxHeld = Math.max(maxHeld, amount);
 
@@ -241,6 +241,7 @@ export class SolanaService {
 
         const isEligible =
             currentBalance >= CONFIG.MIN_TOKENS &&
+            currentBalance <= CONFIG.MAX_TOKENS &&
             firstAcquired &&
             !hasSold &&
             holdingDays >= (CONFIG.MONTHS_REQUIRED * 30);
@@ -292,6 +293,9 @@ export class SolanaService {
     getEligibilityReason(currentBalance, hasSold, firstAcquired, holdingDays) {
         if (currentBalance < CONFIG.MIN_TOKENS) {
             return `Insufficient balance (${currentBalance.toLocaleString()} < ${CONFIG.MIN_TOKENS.toLocaleString()})`;
+        }
+        if (currentBalance > CONFIG.MAX_TOKENS) {
+            return `Balance exceeds maximum limit (${currentBalance.toLocaleString()} > ${CONFIG.MAX_TOKENS.toLocaleString()})`;
         }
         if (hasSold) {
             return 'Has sold KOKO in the past';
